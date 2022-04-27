@@ -1,10 +1,15 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
+const body_parser = require('body-parser');
+const cors = require('cors');
 
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({ extended: true }));
+app.use(cors());
 // MongoDB configuration
 const { MongoClient } = require('mongodb');
-const url = process.env.URL;
+const dbURL = process.env.URL;
 const dbName = 'sc';
 
 let _db;
@@ -16,7 +21,7 @@ function _getDb() {
             resolve(_db);
         }
         else {
-            MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+            MongoClient.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
                 .then(client => {
                     _db = client.db(dbName);
                     resolve(_db);
@@ -45,6 +50,21 @@ app.get('/products', (req, res) => {
     });
 });
 
+// add product to collection "designshop"
+app.post('/api/add', (req, res) => {
+    const product = req.body;
+    console.log(req.body)
+    _getDb()
+        .then(db => {
+            db.collection('designshop').insertOne(product)
+                .then(() => {
+                    res.redirect("localhost:8080/add");
+                })
+                .catch(err => {
+                    res.send(err);
+                });
+        });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
