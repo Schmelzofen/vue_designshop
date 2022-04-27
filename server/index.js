@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
+require('dotenv').config();
 
 // MongoDB configuration
 const { MongoClient } = require('mongodb');
-const url = 'mongodb+srv://admin:12345@container.ixk43.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const url = process.env.URL;
 const dbName = 'sc';
 
 let _db;

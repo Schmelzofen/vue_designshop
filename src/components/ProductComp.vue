@@ -1,10 +1,10 @@
 <template>
-    <div class="productContainer">
+    <div class="productss">
         <div class="product" v-for="product in products" :key="product.id">
-            <div class="productImage">
+            <div>
                 <img :src="product.ProductLink" alt="product image">
             </div>
-            <div class="productInfo">
+            <div class="productNamePrice">
                 <h3>{{ product.ProductName }}</h3>
                 <p>{{ product.Price }}.00</p>
             </div>
